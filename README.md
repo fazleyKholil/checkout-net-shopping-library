@@ -62,28 +62,26 @@ There are various API endpoints that the **APIClient** interacts with.
 #Shopping
 ##Adding item to shopping list example
 ```csharp
-// Create payload
- var shoppingListCreateRequest = new ItemCreate()
-            {
-                Id=1,
-                name="pepsi",
-                price=15.00,
-                quantity=2,
-                Type="drinks"// category of items to be added
-            };
-
-            try
+ try
             {
                 // Create APIClient instance with your secret key
-                APIClient ckoAPIClient = new APIClient("sk_test_32b9cb39-1cd6-4f86-b750-7069a133667d", Checkout.APIClient.Helpers.Environment.Sandbox);
-
+                APIClient ckoAPIClient = new APIClient(key, Checkout.Helpers.Environment.Sandbox);
                 // Submit your request and receive an apiResponse
-                HttpResponse<Item> apiResponse = ckoAPIClient.ShoppingService.CreateItem(shoppingListCreateRequest);
+
+                // Create payload
+                Item item = new Item() { Id = 10, name = "Lucozade1", price = 45, quantity = 1 };
+                ItemCreate itemCreate = new ItemCreate()
+                {
+                    Item = item,
+                    Type = "drinks"
+                };
+
+                HttpResponse<ShoppingListCategorised> apiResponse =
+                    ckoAPIClient.ShoppingService.CreateItem(itemCreate);
 
                 if (!apiResponse.HasError)
                 {
-                    // Access the response object retrieved from the api
-                    var item = apiResponse.Model;
+                    //item successfully created
                 }
                 else
                 {
@@ -93,13 +91,13 @@ There are various API endpoints that the **APIClient** interacts with.
             }
             catch (Exception e)
             {
-                //... Handle exception
+
             }
 ```
 Response:
 ```javascript
-//status 200 ok
- {"Id":1,"name":"pepsi","quantity":2,"price":15.0,"DatePurchased":"0001-01-01T00:00:00"}
+//status 201created
+[ {"Id":10,"name":"Lucozade1","quantity":1,"price":45.0,"DatePurchased":"0001-01-01T00:00:00"}]
 ```
 
 ##Get shopping list example
@@ -107,15 +105,16 @@ Response:
        try
             {
                 // Create APIClient instance with your secret key
-                APIClient ckoAPIClient = new APIClient("sk_test_32b9cb39-1cd6-4f86-b750-7069a133667d", Checkout.APIClient.Helpers.Environment.Sandbox);
-
+                APIClient ckoAPIClient = new APIClient(key, Checkout.Helpers.Environment.Sandbox);
                 // Submit your request and receive an apiResponse
                 HttpResponse<ShoppingList> apiResponse = ckoAPIClient.ShoppingService.GetAll();
-
                 if (!apiResponse.HasError)
                 {
                     // Access the response object retrieved from the api
                     var item = apiResponse.Model;
+                    Console.Write(item["drinks"]);
+                    //Then use the dictionary to display the data. Example Console.Write( item[keyValue].ElementAt(0).name);
+                    Console.ReadKey();
                 }
                 else
                 {
@@ -127,19 +126,90 @@ Response:
             {
                 //... Handle exception
             }
-        }
 ```
-Response:
-```javascript
-{"drinks":
-          [{"Id":1,"name":"pepsi","quantity":1,"price":15.0,"DatePurchased":"0001-01-01T00:00:00"},
-           {"Id":2,"name":"fanta","quantity":1,"price":15.0,"DatePurchased":"0001-01-01T00:00:00"},
-           {"Id":3,"name":"perona","quantity":10,"price":15.0,"DatePurchased":"0001-01-01T00:00:00"
-          }],
-"stationary":[{"Id":1,"name":"pen","quantity":1,"price":15.0,"DatePurchased":"0001-01-01T00:00:00"},
-              {"Id":2,"name":"eraser","quantity":1,"price":15.0,"DatePurchased":"0001-01-01T00:00:00"},
-              {"Id":6,"name":"pen parker","quantity":10,"price":1500.0,"DatePurchased":"0001-01-01T00:00:00"}
-              ]}
+##Get shopping list by category of shopping item. 
+```csharp
+        try
+            {
+                // Create APIClient instance with your secret key
+                APIClient ckoAPIClient = new APIClient(key, Checkout.Helpers.Environment.Sandbox);
+                // Submit your request and receive an apiResponse
+                HttpResponse<ShoppingListCategorised> apiResponse = 
+                    ckoAPIClient.ShoppingService.GetShoppingListByCategory("drinks");
+                if (!apiResponse.HasError)
+                {
+                    // Access the response object retrieved from the api
+                    var items = apiResponse.Model;
+                    foreach (BaseItem item in items)
+                        Console.WriteLine(" name:{0}, Qty:{1}, price:{2}",item.name,item.quantity,item.price);
+                    Console.ReadKey();
+                }
+                else
+                {
+                    // Api has returned an error object. You can access the details in the error property of the apiResponse.
+                    // apiResponse.error
+                }
+            }
+            catch (Exception e)
+            {
+                //... Handle exception
+            }
+```
+
+##Get a shopping item given its name. 
+```csharp
+         try
+            {
+                // Create APIClient instance with your secret key
+                APIClient ckoAPIClient = new APIClient(key, Checkout.Helpers.Environment.Sandbox);
+                // Submit your request and receive an apiResponse
+                HttpResponse<Item> apiResponse =
+                    ckoAPIClient.ShoppingService.GetItemByName(new ItemDto { name = "fanta", Type = "drinks" });
+                if (!apiResponse.HasError)
+                {
+                    // Access the response object retrieved from the api
+                    var item = apiResponse.Model;
+                    Console.WriteLine(" name:{0}, Qty:{1}, price:{2}", item.name, item.quantity, item.price);
+                    Console.ReadKey();
+                }
+                else
+                {
+                    // Api has returned an error object. You can access the details in the error property of the apiResponse.
+                    // apiResponse.error
+                }
+            }
+            catch (Exception e)
+            {
+                //... Handle exception
+            }
+```
+
+##Get a shopping item given its id. 
+```csharp
+         try
+            {
+                // Create APIClient instance with your secret key
+                APIClient ckoAPIClient = new APIClient(key, Checkout.Helpers.Environment.Sandbox);
+                // Submit your request and receive an apiResponse
+                HttpResponse<Item> apiResponse =
+                    ckoAPIClient.ShoppingService.GetItemById(new ItemDto{ Id = 1, Type = "drinks" });
+                if (!apiResponse.HasError)
+                {
+                    // Access the response object retrieved from the api
+                    var item = apiResponse.Model;
+                    Console.WriteLine(" name:{0}, Qty:{1}, price:{2}", item.name, item.quantity, item.price);
+                    Console.ReadKey();
+                }
+                else
+                {
+                    // Api has returned an error object. You can access the details in the error property of the apiResponse.
+                    // apiResponse.error
+                }
+            }
+            catch (Exception e)
+            {
+                //... Handle exception
+            }
 ```
 
 ####Charges
