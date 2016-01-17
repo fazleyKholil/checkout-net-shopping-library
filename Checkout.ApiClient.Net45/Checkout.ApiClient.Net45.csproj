@@ -89,6 +89,7 @@
     <Compile Include="ApiServices\Shopping\ResponseModels\Item.cs" />
     <Compile Include="ApiServices\Shopping\ResponseModels\ShoppingList.cs" />
     <Compile Include="ApiServices\Shopping\ResponseModels\ShoppingListCategorised.cs" />
+    <Compile Include="ApiServices\Shopping\ShoppingClient.cs" />
     <Compile Include="ApiServices\Shopping\ShoppingService.cs" />
     <Compile Include="ApiServices\Tokens\RequestModels\PaymentTokenCreate.cs" />
     <Compile Include="ApiServices\Tokens\ResponseModels\PaymentTokenCreate.cs" />

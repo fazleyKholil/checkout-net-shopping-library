@@ -165,14 +165,6 @@ public class ApiUrls
         }
     }
 
-    public static string ShoppingItemByName
-    {
-        get
-        {
-            return _shoppingApiUrl ?? (_shoppingApiUrl = string.Concat(AppSettings.BaseApiUri, "/Shopping?{0}"));
-        }
-    }
-
 
     public static string Cards
     {
