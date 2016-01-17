@@ -57,6 +57,90 @@ There are various API endpoints that the **APIClient** interacts with.
 - Customers
 - Cards
 - Tokens
+- Shopping
+
+#Shopping
+##Adding item to shopping list example
+```csharp
+// Create payload
+ var shoppingListCreateRequest = new ItemCreate()
+            {
+                Id=1,
+                name="pepsi",
+                price=15.00,
+                quantity=2,
+                Type="drinks"// category of items to be added
+            };
+
+            try
+            {
+                // Create APIClient instance with your secret key
+                APIClient ckoAPIClient = new APIClient("sk_test_32b9cb39-1cd6-4f86-b750-7069a133667d", Checkout.APIClient.Helpers.Environment.Sandbox);
+
+                // Submit your request and receive an apiResponse
+                HttpResponse<Item> apiResponse = ckoAPIClient.ShoppingService.CreateItem(shoppingListCreateRequest);
+
+                if (!apiResponse.HasError)
+                {
+                    // Access the response object retrieved from the api
+                    var item = apiResponse.Model;
+                }
+                else
+                {
+                    // Api has returned an error object. You can access the details in the error property of the apiResponse.
+                    // apiResponse.error
+                }
+            }
+            catch (Exception e)
+            {
+                //... Handle exception
+            }
+```
+Response:
+```javascript
+//status 200 ok
+ {"Id":1,"name":"pepsi","quantity":2,"price":15.0,"DatePurchased":"0001-01-01T00:00:00"}
+```
+
+##Get shopping list example
+```csharp
+       try
+            {
+                // Create APIClient instance with your secret key
+                APIClient ckoAPIClient = new APIClient("sk_test_32b9cb39-1cd6-4f86-b750-7069a133667d", Checkout.APIClient.Helpers.Environment.Sandbox);
+
+                // Submit your request and receive an apiResponse
+                HttpResponse<ShoppingList> apiResponse = ckoAPIClient.ShoppingService.GetAll();
+
+                if (!apiResponse.HasError)
+                {
+                    // Access the response object retrieved from the api
+                    var item = apiResponse.Model;
+                }
+                else
+                {
+                    // Api has returned an error object. You can access the details in the error property of the apiResponse.
+                    // apiResponse.error
+                }
+            }
+            catch (Exception e)
+            {
+                //... Handle exception
+            }
+        }
+```
+Response:
+```javascript
+{"drinks":
+          [{"Id":1,"name":"pepsi","quantity":1,"price":15.0,"DatePurchased":"0001-01-01T00:00:00"},
+           {"Id":2,"name":"fanta","quantity":1,"price":15.0,"DatePurchased":"0001-01-01T00:00:00"},
+           {"Id":3,"name":"perona","quantity":10,"price":15.0,"DatePurchased":"0001-01-01T00:00:00"
+          }],
+"stationary":[{"Id":1,"name":"pen","quantity":1,"price":15.0,"DatePurchased":"0001-01-01T00:00:00"},
+              {"Id":2,"name":"eraser","quantity":1,"price":15.0,"DatePurchased":"0001-01-01T00:00:00"},
+              {"Id":6,"name":"pen parker","quantity":10,"price":1500.0,"DatePurchased":"0001-01-01T00:00:00"}
+              ]}
+```
 
 ####Charges
 
