@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace Checkout.ApiServices.Shopping.ResponseModels
 { 
-    class Item : BaseItem
+    public class Item : BaseItem
     {
         public bool LiveMode { get; set; }
         public string Created { get; set; }

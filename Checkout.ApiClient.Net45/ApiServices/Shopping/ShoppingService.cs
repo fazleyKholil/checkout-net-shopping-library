@@ -11,7 +11,7 @@ using System.Threading.Tasks;
 
 namespace Checkout.ApiServices.Shopping
 {
-    class ShoppingService
+    public class ShoppingService
     {
         public HttpResponse<ShoppingList> GetAll()
         {
@@ -19,43 +19,46 @@ namespace Checkout.ApiServices.Shopping
             return new ApiHttpClient().GetRequest<ShoppingList>(getShoppingListUri, AppSettings.SecretKey);
         }
 
-        public HttpResponse<ShoppingListCategorised> GetShoppingItemList(string type)
+        public HttpResponse<ShoppingListCategorised> GetShoppingListByCategory(string type)
         {
             var getShoppingListByTypeUri = ApiUrls.ShoppingItems;
             getShoppingListByTypeUri = UrlHelper.AddParameterToUrl(getShoppingListByTypeUri, "type", type);
             return new ApiHttpClient().GetRequest<ShoppingListCategorised>(getShoppingListByTypeUri, AppSettings.SecretKey);
         }
 
-        public HttpResponse<Item> GetItemByName(string type)
+        public HttpResponse<Item> GetItemByName(ItemDto itemCreate)
         {
             var getShoppingItemByNameUri = ApiUrls.ShoppingItems;
-            getShoppingItemByNameUri = UrlHelper.AddParameterToUrl(getShoppingItemByNameUri, "type", type);
+            getShoppingItemByNameUri = UrlHelper.AddParameterToUrl(getShoppingItemByNameUri, "type", itemCreate.Type);
+            getShoppingItemByNameUri = UrlHelper.AddParameterToUrl(getShoppingItemByNameUri, "name", itemCreate.name);
             return new ApiHttpClient().GetRequest<Item>(getShoppingItemByNameUri, AppSettings.SecretKey);
         }
 
-        public HttpResponse<Item> GetItemById(ItemCreate itemCreate)
+        public HttpResponse<Item> GetItemById(ItemDto itemCreate)
         {
-            var getShoppingItemByNameUri = ApiUrls.ShoppingItemWithId;
+            var getShoppingItemByNameUri = string.Format(ApiUrls.ShoppingItemWithId, itemCreate.Id);
             getShoppingItemByNameUri = UrlHelper.AddParameterToUrl(getShoppingItemByNameUri, "type", itemCreate.Type);
             return new ApiHttpClient().GetRequest<Item>(getShoppingItemByNameUri, AppSettings.SecretKey);
         }
 
-        public HttpResponse<Item> CreateItem(ItemCreate requestModel)
+        public HttpResponse<ShoppingListCategorised> CreateItem(ItemCreate requestModel)
         {
-            var getShoppingItemByNameUri = ApiUrls.ShoppingItemWithId;
+            var getShoppingItemByNameUri = ApiUrls.ShoppingItems;
             getShoppingItemByNameUri = UrlHelper.AddParameterToUrl(getShoppingItemByNameUri, "type", requestModel.Type);
-            return new ApiHttpClient().PostRequest<Item>(getShoppingItemByNameUri, AppSettings.SecretKey, requestModel);
+            BaseItem[] itemCreate = new BaseItem[1]; 
+            itemCreate[0] = requestModel.Item;
+            return new ApiHttpClient().PostRequest<ShoppingListCategorised>(getShoppingItemByNameUri, AppSettings.SecretKey, itemCreate);
         }
 
 
-        public HttpResponse<OkResponse> DeleteItem(ItemCreate requestModel)
+        public HttpResponse<OkResponse> DeleteItem(ItemDto requestModel)
         {
             var deleteItemUri = string.Format(ApiUrls.ShoppingItemWithId, requestModel.Id);
             deleteItemUri = UrlHelper.AddParameterToUrl(deleteItemUri, "type", requestModel.Type);
             return new ApiHttpClient().DeleteRequest<OkResponse>(deleteItemUri, AppSettings.SecretKey);
         }
 
-        public HttpResponse<OkResponse> UpdateItem(ItemCreate requestModel)
+        public HttpResponse<OkResponse> UpdateItem(ItemDto requestModel)
         {
             var updateItemUri = string.Format(ApiUrls.Customer, requestModel.Id);
             updateItemUri = UrlHelper.AddParameterToUrl(updateItemUri, "type", requestModel.Type);

@@ -86,6 +86,7 @@
     <Compile Include="ApiServices\SharedModels\Phone.cs" />
     <Compile Include="ApiServices\Shopping\RequestModels\BaseItem.cs" />
     <Compile Include="ApiServices\Shopping\RequestModels\ItemCreate.cs" />
+    <Compile Include="ApiServices\Shopping\RequestModels\ItemDto.cs" />
     <Compile Include="ApiServices\Shopping\ResponseModels\Item.cs" />
     <Compile Include="ApiServices\Shopping\ResponseModels\ShoppingList.cs" />
     <Compile Include="ApiServices\Shopping\ResponseModels\ShoppingListCategorised.cs" />

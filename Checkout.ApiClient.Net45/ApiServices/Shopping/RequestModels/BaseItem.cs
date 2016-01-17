@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Checkout.ApiServices.Shopping.RequestModels
 {
-    class BaseItem
+    public class BaseItem
     {
         public int Id { get; set; }
         public string name { get; set; }

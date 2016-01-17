@@ -6,8 +6,8 @@ using System.Threading.Tasks;
 
 namespace Checkout.ApiServices.Shopping.ResponseModels
 {
-    class ShoppingList
+    public class ShoppingList : Dictionary<string, List<Item>>
     {
-        public Dictionary<string, List<Item>> Items { get; set; }
+
     }
 }

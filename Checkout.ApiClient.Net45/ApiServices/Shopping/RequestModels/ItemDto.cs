@@ -4,10 +4,11 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Checkout.ApiServices.Shopping.ResponseModels
+namespace Checkout.ApiServices.Shopping.RequestModels
 {
-    public class ShoppingListCategorised : List<Item>
+    public class ItemDto : BaseItem
     {
-    
+        public string Type { get; set; }
+
     }
 }
